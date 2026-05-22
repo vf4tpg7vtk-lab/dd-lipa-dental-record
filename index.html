@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="DentaRecord"/>
+  <meta name="theme-color" content="#b5271c"/>
+  <meta name="description" content="Digital Dental Chart & Patient Record System"/>
+
+  <title>DentaRecord</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json"/>
+
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+  <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png"/>
+  <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png"/>
+  <link rel="icon" type="image/png" href="icons/icon-192.png"/>
+
+  <!-- Apple Splash Screens (key for iOS PWA) -->
+  <meta name="apple-touch-startup-image" content="icons/icon-512.png"/>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/app.css"/>
+
+  <style>
+    /* iOS safe area and notch handling */
+    body {
+      padding-top: env(safe-area-inset-top);
+    }
+    .app-header {
+      padding-top: calc(env(safe-area-inset-top) + 0px);
+      height: calc(64px + env(safe-area-inset-top));
+    }
+    @media (max-width: 768px) {
+      .app-header {
+        height: calc(60px + env(safe-area-inset-top));
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- iOS Install Banner (shown only on iOS Safari, not installed) -->
+  <div id="install-banner" style="display:none" class="install-banner" onclick="document.getElementById('install-banner').style.display='none'">
+    <span style="font-size:24px">🦷</span>
+    <p><strong>Install DentaRecord</strong>Tap <strong>Share</strong> then <strong>"Add to Home Screen"</strong> for the full app experience — works offline too.</p>
+    <span style="font-size:18px;opacity:0.6">✕</span>
+  </div>
+
+  <div id="app"></div>
+
+  <script src="js/app.js"></script>
+
+  <script>
+    // Show iOS install prompt if on Safari and not already installed
+    (function() {
+      const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      const isInstalled = window.navigator.standalone === true;
+      const dismissed = sessionStorage.getItem('install_dismissed');
+      if (isIOS && isSafari && !isInstalled && !dismissed) {
+        setTimeout(() => {
+          const banner = document.getElementById('install-banner');
+          if (banner) {
+            banner.style.display = 'flex';
+            banner.addEventListener('click', () => sessionStorage.setItem('install_dismissed','1'));
+          }
+        }, 2500);
+      }
+    })();
+  </script>
+
+</body>
+</html>
